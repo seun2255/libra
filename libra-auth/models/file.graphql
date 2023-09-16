@@ -1,0 +1,9 @@
+type file @createModel(accountRelation: LIST, description: "file") {
+  author: DID! @documentAccount
+  version: CommitID! @documentVersion
+  appVersion: String! @string(maxLength: 100)
+  text: String @string(maxLength: 300000000)
+  file: String @string(maxLength: 300000000)
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

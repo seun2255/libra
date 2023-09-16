@@ -1,14 +1,19 @@
 export const config = {
-  name: "dataverse_app_with_toolkits_example", // app name should NOT contain "-"
+  name: "libra_test", // app name should NOT contain "-"
   logo: "https://bafybeifozdhcbbfydy2rs6vbkbbtj3wc4vjlz5zg2cnqhb2g4rm2o5ldna.ipfs.w3s.link/dataverse.svg",
-  website: [], // you can use localhost:(port) for testing
+  website: ["localhost:3000"], // you can use localhost:(port) for testing
   defaultFolderName: "Main",
-  description: "This is dataverse app example.",
+  description: "The number one decentralized file storage library.",
   models: [
     {
       isPublicDomain: false, // default
-      schemaName: "post.graphql",
+      schemaName: "folder.graphql",
       encryptable: ["text", "images", "videos"], // strings within the schema and within the array represent fields that may be encrypted, while fields within the schema but not within the array represent fields that will definitely not be encrypted
+    },
+    {
+      isPublicDomain: false, // default
+      schemaName: "file.graphql",
+      encryptable: ["file"],
     },
     {
       isPublicDomain: true,
