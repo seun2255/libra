@@ -1,0 +1,28 @@
+.container {
+  background-color: #323c86;
+  border: 1px solid #3d51e6;
+  border-radius: 10px 0 0 10px;
+  padding: 0.4em 1em;
+  padding-right: 100px;
+  position: fixed;
+  bottom: 30px;
+  opacity: 0;
+  right: -100px;
+  box-sizing: border-box;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+}
+
+.text {
+  font-size: 18px;
+  color: white;
+}
+
+.icon {
+  position: relative;
+  width: 35px;
+  height: 30px;
+}
