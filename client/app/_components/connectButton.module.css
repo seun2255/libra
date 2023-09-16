@@ -1,0 +1,17 @@
+.connect__button {
+  background-color: #6a76cb;
+  border: none;
+  font-size: 1em;
+  box-sizing: border-box;
+  padding: 0.4em 0.8em;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0px 5px 32px #bec0bf;
+  cursor: pointer;
+  transition: transform 1s ease;
+  border-radius: 5px;
+}
+
+.connect__button:hover {
+  transform: scale(1.1);
+}
