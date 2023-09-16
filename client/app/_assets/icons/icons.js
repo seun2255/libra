@@ -27,6 +27,8 @@ import xdcLogo from "./xdcLogo.svg";
 import change from "./switch.svg";
 import arrowDown from "./arrowDown.svg";
 import requests from "./requests.svg";
+import library from "./library.svg";
+import folder from "./folder.svg";
 
 const icons = {
   cancel,
@@ -54,10 +56,12 @@ const icons = {
   create,
   finance,
   home,
+  folder,
   xdcLogo,
   change,
   arrowDown,
   requests,
+  library,
 };
 
 export default icons;
