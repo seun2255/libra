@@ -1,0 +1,42 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: #ecf5ed;
+}
+
+.content {
+  height: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.not__connected {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock__icon {
+  position: relative;
+  height: 350px;
+  width: 600px;
+  margin-bottom: 30px;
+}
+
+.connect {
+  background-color: #6a76cb;
+  font-size: 23px;
+  font-weight: 600;
+  color: white;
+  padding: 0.2em 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
