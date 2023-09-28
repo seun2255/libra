@@ -24,7 +24,8 @@
     "react-dropzone": "^14.2.3",
     "react-loader-spinner": "^5.4.5",
     "react-redux": "^8.1.2",
-    "video-react": "^0.16.0"
+    "video-react": "^0.16.0",
+    "web3.storage": "^4.5.5"
   },
   "devDependencies": {
     "video.js": "^8.5.2"
