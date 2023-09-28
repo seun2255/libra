@@ -8,6 +8,7 @@ import {
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/user";
+import { getBalances } from "../api";
 import styles from "./connectButton.module.css";
 import { checkIfUserExists, createUser, getUserDetails } from "../database";
 import { dataverseConnector } from "../dataverse";
@@ -25,28 +26,34 @@ export default function ConnectButton() {
         wallet,
       },
     });
-    console.log(pkh);
   };
 
   const connectWallet = async () => {
     try {
       const res = await dataverseConnector.connectWallet();
+      console.log(res.address);
       setWallet(res.wallet);
       await createCapability();
       checkIfUserExists(res.address).then(async (exists) => {
         if (exists) {
           const user = await getUserDetails(res.address);
-          console.log(user);
+          const { tokenBalanceEther, ethBalanceEther } = await getBalances(
+            res.address
+          );
+          user.balance = ethBalanceEther;
+          user.tokenBalance = tokenBalanceEther;
           dispatch(login(user));
         } else {
-          console.log("Got here");
           await createUser(res.address);
-          console.log("here too");
           const user = await getUserDetails(res.address);
+          const { tokenBalanceEther, ethBalanceEther } = await getBalances(
+            res.address
+          );
+          user.balance = ethBalanceEther;
+          user.tokenBalance = tokenBalanceEther;
           dispatch(login(user));
         }
       });
-      // dispatch(login({ address: res.address, image: "", username: "user" }));
     } catch (error) {
       console.error(error);
     }

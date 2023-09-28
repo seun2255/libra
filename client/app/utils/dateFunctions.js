@@ -13,6 +13,45 @@ const timeStamp = () => {
   return `${day}/${month}/${year} ${hour}:${minute}`;
 };
 
+const fileUploadTime = (date) => {
+  // Ensure the input is a valid Date object
+  if (!(date instanceof Date) || isNaN(date)) {
+    throw new Error("Invalid Date");
+  }
+
+  // Define months and get date components
+  const months = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+  ];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? "pm" : "am";
+
+  // Convert 24-hour time to 12-hour time
+  const formattedHours = hours % 12 || 12;
+
+  // Format the date string
+  const formattedDate = `${month}/${day}/${year}, ${formattedHours}:${String(
+    minutes
+  ).padStart(2, "0")} ${ampm}`;
+
+  return formattedDate;
+};
+
 const convertToDateTime = (timestampString) => {
   const [datePart, timePart] = timestampString.split(" ");
   const [day, month, year] = datePart.split("/");
@@ -43,4 +82,4 @@ function timeValid(targetDate) {
   return now.getTime() < expiryDate.getTime();
 }
 
-export { timeStamp, convertToDateTime, formatTime, timeValid };
+export { timeStamp, convertToDateTime, formatTime, timeValid, fileUploadTime };

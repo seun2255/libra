@@ -6,82 +6,59 @@ import icons from "@/app/_assets/icons/icons";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import linkCreator from "@/app/utils/linkCreator";
-import { Web3Storage } from "web3.storage";
 import { useRouter } from "next/navigation";
-import { ThreeDots } from "react-loader-spinner";
-import { animated, useSpring } from "@react-spring/web";
-import { uploadVideo } from "@/app/api";
 import { useSelector } from "react-redux";
 import ProgressModal from "./progressModal";
-import { formatTime } from "@/app/utils/dateFunctions";
+import arrayToString from "@/app/utils/arrayToString";
+import fileType from "@/app/utils/fileType";
+import fileExtension from "@/app/utils/fileExtension";
+import { uploadFile } from "@/app/api";
+import {
+  uploadToLighthouse,
+  uploadEncryptedFile,
+  applyAccessControl,
+} from "@/app/lighthouse";
 
 export default function UploadVideo() {
   const [title, setTitle] = useState("");
   const [description, setDescriptionn] = useState("");
-  const [thumbnail, setThumbnail] = useState(false);
-  const [thumbnailPic, setThumbnailPic] = useState(false);
-  const [video, setVideo] = useState(false);
-  const [videoLink, setVideoLink] = useState("");
-  const [videoLoader, setVideoLoader] = useState(false);
+  const [file, setFile] = useState(false);
   const [tags, setTags] = useState([]);
-  const [picLoader, setPicLoader] = useState(false);
+  const [type, setType] = useState("");
   const [progress, setProgress] = useState(0);
-  const [saving, setSaving] = useState(false);
+  const [uploadModal, setUploadModal] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [duration, setDuration] = useState(0);
   const [selectedPrivacy, setSelectedPrivacy] = useState(0);
   const [cost, setCost] = useState(0);
+  const [upload, setUpload] = useState();
+  const [uploading, setUploading] = useState(false);
+  const [extension, setExtension] = useState("");
+  const [encrypting, setEncrypting] = useState(false);
 
   const { user } = useSelector((state) => state.user);
 
   const router = useRouter();
 
-  const token = process.env.NEXT_PUBLIC_STORAGE_TOKEN;
-  const client = new Web3Storage({ token });
+  const mimeType = () => {
+    return `${type}/${extension}`;
+  };
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    var uploadedFile;
-    acceptedFiles.forEach((file) => {
-      uploadedFile = file;
+    var file;
+    acceptedFiles.forEach((item) => {
+      file = item;
     });
-
-    const video = document.createElement("video");
-
-    video.preload = "metadata";
-    video.src = URL.createObjectURL(uploadedFile);
-
-    video.onloadedmetadata = function () {
-      const videoDuration = video.duration;
-      console.log("Video Duration:", formatTime(videoDuration));
-      setDuration(formatTime(videoDuration));
-    };
-    setVideoLoader(true);
-    setVideo(uploadedFile);
-
-    const cid = await client.put(acceptedFiles);
-    const url = linkCreator(cid, uploadedFile.name);
-    setVideoLink(url);
-    setVideoLoader(false);
-  }, []);
+    setType(fileType(file));
+    console.log(fileExtension(file));
+    setExtension(fileExtension(file));
+    setFile(file);
+    setUpload(acceptedFiles);
+  });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleThumbnailUpload = async (event) => {
-    setPicLoader(true);
-    let file = event.target.files[0];
-    if (file) {
-      const cid = await client.put(event.target.files);
-      const url = linkCreator(cid, file.name);
-      setThumbnailPic(url);
-      setThumbnail(url);
-      setPicLoader(false);
-    }
-  };
-
   const handelCancel = () => {
-    setVideo(false);
-    setVideoLink("");
-    setVideoLoader(false);
+    setFile(false);
   };
 
   const addTag = (tagIndex) => {
@@ -107,26 +84,50 @@ export default function UploadVideo() {
     if (id === 0) setCost(0);
   };
 
-  const handleUpload = () => {
-    setSaving(true);
-    uploadVideo(
+  const handleUpload = async () => {
+    setUploading(true);
+    setUploadModal(true);
+
+    const progressCallback = (progressData) => {
+      let percentageDone =
+        100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+      if (percentageDone >= 99) percentageDone = 100;
+      setProgress(percentageDone);
+    };
+
+    const secureUpload = async () => {
+      const hash = await uploadEncryptedFile(upload, progressCallback);
+      setUploading(false);
+      setEncrypting(true);
+      const cid = await applyAccessControl(hash);
+      setEncrypting(false);
+      return cid;
+    };
+
+    const hash =
+      selectedPrivacy === 0
+        ? await uploadToLighthouse(upload, progressCallback)
+        : await secureUpload();
+
+    const link = linkCreator(hash);
+    setUploading(false);
+    console.log("file Link: ", link);
+    console.log("file hash: ", hash);
+
+    uploadFile(
       title,
       description,
-      videoLink,
-      thumbnail,
-      tags,
-      duration,
+      mimeType(),
+      link,
+      hash,
+      arrayToString(tags),
       privacy[selectedPrivacy],
       cost
     ).then(() => {
       setSaved(true);
+      router.push("/");
     });
   };
-
-  const animateProgress = useSpring({
-    width: `${progress}%`,
-    config: { duration: 1000 },
-  });
 
   return (
     <div className={styles.container}>
@@ -138,7 +139,7 @@ export default function UploadVideo() {
         <div
           className={styles.upload__box}
           {...getRootProps()}
-          style={{ borderColor: isDragActive ? "#3fa77a" : "#747c87" }}
+          style={{ borderColor: isDragActive ? "#8e96d2" : "#747c87" }}
         >
           <input {...getInputProps()} />
           <div className={styles.upload__icon}>
@@ -149,36 +150,25 @@ export default function UploadVideo() {
           </p>
           <p className={styles.accepted__types}>Mp4 or Hmv</p>
         </div>
-        {video && (
-          <div className={styles.video__uploaded}>
-            <div className={styles.file__icon__outer}>
-              <div className={styles.file__icon}>
-                <Image src={icons.file} alt="icon" fill />
-              </div>
-            </div>
-            <div className={styles.video__details}>
-              <p className={styles.video__name}>{video.name}</p>
-              <p className={styles.video__size}>
-                {(video.size / (1024 * 1024)).toFixed(2)} mb
-              </p>
-            </div>
-            {videoLoader ? (
-              <ThreeDots
-                height="16px"
-                width="120px"
-                color="#3fa77a"
-                visible={true}
-              />
-            ) : (
-              <div className={styles.succes}>
-                Uploaded{" "}
-                <div className={styles.tick}>
-                  <Image src={icons.succesTick} alt="succes icon" fill />
+        {file && (
+          <div className={styles.file__uploaded}>
+            <div className={styles.file__info}>
+              <div className={styles.file__icon__outer}>
+                <div className={styles.file__icon}>
+                  <Image src={icons.file} alt="icon" fill />
                 </div>
               </div>
-            )}
-            <div className={styles.cancel__icon} onClick={handelCancel}>
-              <Image src={icons.cancel} alt="cancel icon" fill />
+              <div className={styles.file__details}>
+                <p className={styles.file__name}>{file.name}</p>
+                <p className={styles.file__size}>
+                  {(file.size / (1024 * 1024)).toFixed(2)} mb
+                </p>
+              </div>
+            </div>
+            <div className={styles.upload__progress}>
+              <div className={styles.cancel__icon} onClick={handelCancel}>
+                <Image src={icons.cancel} alt="cancel icon" fill />
+              </div>
             </div>
           </div>
         )}
@@ -195,47 +185,6 @@ export default function UploadVideo() {
             onChange={(e) => setDescriptionn(e.target.value)}
             placeholder="Whats your content about"
           />
-        </div>
-        <div className={styles.thumbnail__box}>
-          <div className={styles.thumbnail}>
-            {picLoader ? (
-              <ThreeDots
-                height="20%"
-                width="80%"
-                color="#3c30dd"
-                visible={true}
-              />
-            ) : thumbnailPic ? (
-              <Image
-                src={thumbnailPic}
-                alt="thumbnail"
-                fill
-                objectFit="cover"
-                objectPosition="center"
-              />
-            ) : (
-              <div className={styles.no__thumbnail}>
-                <div className={styles.thumbnail__icon}>
-                  <Image src={icons.thumbnail} alt="thumbnail" fill />
-                </div>
-                <p>Upload Thumbnail</p>
-              </div>
-            )}
-          </div>
-          <div className={styles.thumbnail__details}>
-            <input
-              type="file"
-              id="thumbnail"
-              accept=".jpg, .jpeg, .png"
-              style={{ display: "none" }}
-              onChange={handleThumbnailUpload}
-            />
-            <label className={styles.thumbnail__button} htmlFor="thumbnail">
-              <div className={styles.text}>Choose an enticing thumbnail</div>
-              <button className={styles.browse}>Browse</button>
-            </label>
-            <p className={styles.new__thumbnail}>Enter new thumbnail</p>
-          </div>
         </div>
         <div className={styles.input__box}>
           <h3>Tags</h3>
@@ -286,7 +235,7 @@ export default function UploadVideo() {
           </div>
           {selectedPrivacy === 1 && (
             <div className={styles.cost__input}>
-              <span>Cost (hvn): </span>
+              <span>Cost (Pri): </span>
               <input
                 type="number"
                 className={styles.custom__input}
@@ -303,7 +252,15 @@ export default function UploadVideo() {
         </div>
       </div>
 
-      {saving && <ProgressModal loading={saved} />}
+      {uploadModal && (
+        <ProgressModal
+          setModal={setUploadModal}
+          loading={saved}
+          progress={progress}
+          uploading={uploading}
+          encrypting={encrypting}
+        />
+      )}
     </div>
   );
 }
@@ -369,3 +326,14 @@ const staticTags = [
 ];
 
 const privacy = ["public", "private"];
+
+// const video = document.createElement("video");
+
+//     video.preload = "metadata";
+//     video.src = URL.createObjectURL(uploadedFile);
+
+//     video.onloadedmetadata = function () {
+//       const videoDuration = video.duration;
+//       console.log("Video Duration:", formatTime(videoDuration));
+//       setDuration(formatTime(videoDuration));
+//     };

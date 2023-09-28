@@ -7,6 +7,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { timeStamp } from "./utils/dateFunctions";
+import { getAllCommunities } from "./tableland";
 // import { getTokenBalance } from "./api";
 
 const db = getFirestore(app);
@@ -37,9 +38,7 @@ const createUser = async (address) => {
     about: "",
     profilePic: "",
     banner: "",
-    followers: [],
-    files: [],
-    requests: [],
+    communities: [],
     address: address,
     transactions: [],
   };
@@ -94,6 +93,19 @@ const getUserDetails = async (address) => {
   return details;
 };
 
+const joinCommunity = async (address, communityId) => {
+  var data = {};
+  const userData = await getDocs(collection(db, "users"));
+  userData.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    data[doc.id] = doc.data();
+  });
+  const user = data[address];
+  console.log(user);
+  // user.communities.push(communityId);
+  // await setDoc(doc(db, "users", address), user);
+};
+
 const recordTransaction = async (address, details) => {
   var data = {};
   const userData = await getDocs(collection(db, "users"));
@@ -111,6 +123,7 @@ export {
   checkIfUserExists,
   getUserDetails,
   db,
+  joinCommunity,
   recordTransaction,
   createUser,
 };

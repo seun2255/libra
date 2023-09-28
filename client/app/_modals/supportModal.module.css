@@ -14,8 +14,8 @@
 .main {
   width: 40%;
   height: 70%;
-  background-color: #bfe2d2;
-  box-shadow: 0px 8px 32px #bec0bf;
+  background-color: #acb1d6;
+  box-shadow: 0px 8px 32px #c1c2ce;
   box-sizing: border-box;
   padding: 30px;
   border-radius: 15px;
@@ -36,7 +36,7 @@
 }
 
 .close:hover {
-  background-color: #90c5ad;
+  background-color: #858bbe;
 }
 
 .title {
@@ -54,7 +54,7 @@
   border: none;
   font-size: 18px;
   color: white;
-  background-color: #90c5ad;
+  background-color: #858bbe;
   padding: 0.4em 0.8em;
   width: -moz-fit-content;
   width: fit-content;
@@ -75,7 +75,7 @@
   border: none;
   font-size: 18px;
   color: white;
-  background-color: #90c5ad;
+  background-color: #858bbe;
   padding: 0.4em 1.2em;
   width: -moz-fit-content;
   width: fit-content;
@@ -87,7 +87,7 @@
   border: none;
   font-size: 18px;
   color: white;
-  background-color: #90c5ad;
+  background-color: #858bbe;
   padding: 0.4em 0.8em;
   width: 80px;
   border-radius: 8px;

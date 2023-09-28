@@ -29,6 +29,17 @@ import arrowDown from "./arrowDown.svg";
 import requests from "./requests.svg";
 import library from "./library.svg";
 import folder from "./folder.svg";
+import grid from "./grid.svg";
+import list from "./list.svg";
+import video from "./video.svg";
+import image from "./image.svg";
+import document from "./document.svg";
+import gift from "./gift.svg";
+import star from "./star.svg";
+import love from "./love.svg";
+import play from "./play.svg";
+import info from "./info.svg";
+import files from "./files.svg";
 
 const icons = {
   cancel,
@@ -62,6 +73,17 @@ const icons = {
   arrowDown,
   requests,
   library,
+  grid,
+  list,
+  video,
+  image,
+  document,
+  gift,
+  star,
+  love,
+  play,
+  info,
+  files,
 };
 
 export default icons;

@@ -6,7 +6,7 @@ import styles from "./supportModal.module.css";
 import icons from "@/app/_assets/icons/icons";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { sendXDC, sendHaven } from "../api";
+import { sendMatic, sendPrime } from "../api";
 import { recordTransaction } from "../database";
 import SuccesModal from "./succedModal";
 import { ThreeDots } from "react-loader-spinner";
@@ -43,13 +43,13 @@ export default function SupportModal(props) {
               type: "Support",
               date: timeStamp(),
               amount: tipAmount,
-              coin: "xdc",
+              coin: "matic",
             }).then(() => {
               recordTransaction(payementAddress, {
                 type: "Gift",
                 date: timeStamp(),
                 amount: tipAmount,
-                coin: "xdc",
+                coin: "matic",
               }).then(() => {
                 console.log("Got here");
                 setSucces(true);
@@ -61,22 +61,22 @@ export default function SupportModal(props) {
             });
           });
         } else {
-          alert("You dont have enough xdc");
+          alert("You dont have enough matic");
         }
       } else {
         if (tipAmount <= user.balance) {
-          sendHaven(payementAddress, tipAmount).then(() => {
+          sendPrime(payementAddress, tipAmount).then(() => {
             recordTransaction(user.address, {
               type: "Support",
               date: timeStamp(),
               amount: tipAmount,
-              coin: "hvn",
+              coin: "pri",
             }).then(() => {
               recordTransaction(payementAddress, {
                 type: "Gift",
                 date: timeStamp(),
                 amount: tipAmount,
-                coin: "xdc",
+                coin: "matic",
               }).then(() => {
                 console.log("Got here");
                 setSucces(true);
@@ -88,7 +88,7 @@ export default function SupportModal(props) {
             });
           });
         } else {
-          alert("You dont have enough hvn");
+          alert("You dont have enough pri");
         }
       }
     } else {
@@ -184,4 +184,4 @@ export default function SupportModal(props) {
 }
 
 const amount = [1, 5, 10, 25, 100];
-const currency = ["xdc", "hvn"];
+const currency = ["matic", "pri"];

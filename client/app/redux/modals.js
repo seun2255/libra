@@ -3,14 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   walletModal: false,
   succesModal: false,
+  dealModal: false,
   newUserModal: false,
   succesModalText: "",
-  videoModal: false,
-  video: "",
-  imageModal: false,
-  image: "",
-  documentModal: false,
-  document: "",
+  fileModal: false,
+  file: "",
 };
 
 export const modalsSlice = createSlice({
@@ -19,6 +16,9 @@ export const modalsSlice = createSlice({
   reducers: {
     setWalletModal: (state, action) => {
       state.walletModal = action.payload;
+    },
+    setDealModal: (state, action) => {
+      state.dealModal = action.payload;
     },
     openSuccesModal: (state, action) => {
       state.succesModalText = action.payload.text;
@@ -30,26 +30,12 @@ export const modalsSlice = createSlice({
     setNewUserModal: (state, action) => {
       state.newUserModal = action.payload;
     },
-    openVideoModal: (state, action) => {
-      state.videoModal = true;
-      state.video = action.payload.video;
+    openFileModal: (state, action) => {
+      state.fileModal = true;
+      state.file = action.payload;
     },
-    closeVideoModal: (state, action) => {
-      state.videoModal = false;
-    },
-    openImageModal: (state, action) => {
-      state.imageModal = true;
-      state.image = action.payload.image;
-    },
-    closeImageModal: (state, action) => {
-      state.imageModal = false;
-    },
-    openDocumentModal: (state, action) => {
-      state.documentModal = true;
-      state.document = action.payload.document;
-    },
-    closeDocumentModal: (state, action) => {
-      state.documentModal = false;
+    closeFileModal: (state, action) => {
+      state.fileModal = false;
     },
   },
 });
@@ -57,9 +43,12 @@ export const modalsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   setWalletModal,
+  setDealModal,
   openSuccesModal,
   closeSuccesModal,
   setNewUserModal,
+  openFileModal,
+  closeFileModal,
 } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

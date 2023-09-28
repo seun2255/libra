@@ -1,0 +1,45 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  height: 280px;
+  width: 240px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.top {
+  height: 140px;
+  width: 100%;
+  position: relative;
+  border-radius: 10px 10px 0px 0px !important;
+  z-index: 2;
+}
+
+.icon {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.base {
+  background-color: #202020;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 15px 10px;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.base h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0%;
+  color: white;
+  padding: 0%;
+}
+
+.base p {
+  margin: 0%;
+  color: #c8c9d2;
+}

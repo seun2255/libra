@@ -10,8 +10,8 @@ import Link from "next/link";
 import getPath from "@/app/utils/getPath";
 
 export default function SideBar(props) {
-  const [expanded, setExpanded] = useState(false);
-  const [showText, setShowText] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+  const [showText, setShowText] = useState(true);
   const [action, setAction] = useState("out");
   var pathname = usePathname();
   if (pathname === "/") pathname = "/home";
@@ -66,9 +66,10 @@ export default function SideBar(props) {
    */
   const options = [
     { icon: icons.home, text: "Home", link: "/" },
+    { icon: icons.files, text: "Library", link: "/library" },
     { icon: icons.create, text: "Create", link: "/create" },
     { icon: icons.finance, text: "Finances", link: "/finances" },
-    { icon: icons.requests, text: "Requests", link: "/requests" },
+    { icon: icons.requests, text: "Communities", link: "/communities" },
     { icon: icons.settings, text: "Profile", link: "/profile/update" },
   ];
 

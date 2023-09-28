@@ -1,0 +1,30 @@
+.container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  border-top: 1px solid #b1acac;
+  text-align: center;
+}
+
+.table th {
+  color: #454343;
+  font-weight: bold;
+}
+
+.table td {
+  padding: 14px 8px;
+}
+
+.table__row > td {
+  cursor: pointer;
+  font-family: Manrope !important;
+}
