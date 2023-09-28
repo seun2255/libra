@@ -19,16 +19,12 @@ export default function FileDeal(props) {
 
   useEffect(() => {
     const getDeal = async () => {
+      console.log(cid);
       let response = await axios.get(
-        "https://api.lighthouse.storage/api/lighthouse/get_proof",
-        {
-          params: {
-            cid: cid,
-            network: "testnet",
-          },
-        }
+        `https://api.lighthouse.storage/api/lighthouse/get_proof?cid=${cid}&network=testnet`
       );
-      setData(response);
+      console.log(response.data);
+      setData(response.data);
       setLoading(false);
     };
 

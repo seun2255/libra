@@ -44,22 +44,22 @@ const getSigner = async () => {
   // return signer;
 
   if (window.ethereum) {
-    // window.ethereum.request({
-    //   method: "wallet_addEthereumChain",
-    //   params: [
-    //     {
-    //       chainId: "0x5",
-    //       rpcUrls: [`https://eth-goerli.alchemyapi.io/v2/${alchemyApiKey}`], // Replace 'YOUR_INFURA_PROJECT_ID' with your Infura project ID
-    //       chainName: "Goerli Testnet",
-    //       nativeCurrency: {
-    //         name: "Ether",
-    //         symbol: "ETH",
-    //         decimals: 18,
-    //       },
-    //       blockExplorerUrls: ["https://goerli.etherscan.io/"],
-    //     },
-    //   ],
-    // });
+    window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId: "0x13881",
+          rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+          chainName: "Matic Mumbai",
+          nativeCurrency: {
+            name: "MATIC",
+            symbol: "MATIC",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+        },
+      ],
+    });
 
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -335,7 +335,7 @@ export {
   buyTokens,
   sellTokens,
   getBalances,
-  sendFil,
+  sendMatic,
   sendPrime,
   confirmAccess,
   payForAccess,

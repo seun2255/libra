@@ -3,8 +3,8 @@ import { Database } from "@tableland/sdk";
 // const fileTableName = "libra_31337_2";
 // const communitiesTableName = "libra_communities_31337_3";
 
-const fileTableName = "libra_80001_7659";
-const communitiesTableName = "libra_communities_80001_7660";
+const fileTableName = "libra_80001_7661";
+const communitiesTableName = "libra_communities_80001_7662";
 
 const getAllFiles = async () => {
   const db = new Database();

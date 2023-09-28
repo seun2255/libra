@@ -64,7 +64,7 @@ export default function SupportModal(props) {
           alert("You dont have enough matic");
         }
       } else {
-        if (tipAmount <= user.balance) {
+        if (tipAmount <= user.tokenBalance) {
           sendPrime(payementAddress, tipAmount).then(() => {
             recordTransaction(user.address, {
               type: "Support",
@@ -174,7 +174,7 @@ export default function SupportModal(props) {
               visible={true}
             />
           ) : (
-            `Send a ${tipAmount} ${currency[selectedCurrency]} Tip`
+            `Send a ${tipAmount} ${currency[selectedCurrency]} gift`
           )}
         </button>
       </div>
