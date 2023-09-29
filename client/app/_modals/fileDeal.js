@@ -9,27 +9,53 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { setDealModal } from "@/app/redux/modals";
 import { ThreeDots } from "react-loader-spinner";
-import axios from "axios";
+import { getDeal } from "../lighthouse";
 
 export default function FileDeal(props) {
   const { cid } = props;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
+  const [dealCompleted, setDealCompleted] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const getDeal = async () => {
-      console.log(cid);
-      let response = await axios.get(
-        `https://api.lighthouse.storage/api/lighthouse/get_proof?cid=${cid}&network=testnet`
-      );
-      console.log(response.data);
-      setData(response.data);
-      setLoading(false);
+    const getData = async () => {
+      const deal = await getDeal(cid);
+      console.log(deal);
+      setData(deal);
     };
 
-    getDeal();
-  });
+    // getDeal(cid).then((deal) => {
+    //   if (deal.dealInfo.length === 0) {
+    //     setLoading(false);
+    //     console.log("something");
+    //   } else {
+    //     console.log("Reached here");
+    //     setData(deal);
+    //     setTimeout(() => {
+    //       setDealCompleted(true);
+    //       setLoading(false);
+    //     }, 2000);
+    //   }
+    // });
+
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (data.dealInfo) {
+      console.log(data);
+      console.log(data.dealInfo.length === 0);
+      if (data.dealInfo.length === 0) {
+        setLoading(false);
+        console.log("something");
+      } else {
+        console.log("Reached here");
+        setDealCompleted(true);
+        setLoading(false);
+      }
+    }
+  }, [data]);
 
   return (
     <div className={styles.container}>
@@ -41,6 +67,21 @@ export default function FileDeal(props) {
             color="#597dffb7"
             visible={true}
           />
+        ) : !dealCompleted ? (
+          <>
+            <div
+              className={styles.close}
+              onClick={() => dispatch(setDealModal(false))}
+            >
+              <Image src={icons.cancel} alt="cancel icon" fill />
+            </div>
+            <h2 className={styles.title}>Deal in Progress</h2>
+            <hr className={styles.line__break} />
+            <div className={styles.detail}>
+              <h4>Your storage deal is in progress</h4>
+              <span>check back after some time for deal details</span>
+            </div>
+          </>
         ) : (
           <>
             <div

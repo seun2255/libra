@@ -21,9 +21,10 @@ contract Community is Ownable {
     string private constant _FILE_TABLE_PREFIX = "libra_community"; // Custom table prefix
 
      // Creating table with `id`, `type`, `url`, `title` and `private`  columns
-    constructor(address _tokenContractAddress, uint256 _fee) {
+    constructor(address _tokenContractAddress, uint256 _fee, address admin) {
         tokenContract = Prime(_tokenContractAddress);
         accessFee = _fee;
+        members.push(admin);
 
         // Creating libra files table
         fileTableId = TablelandDeployments.get().create(
@@ -180,11 +181,15 @@ contract Community is Ownable {
 
     function joinCommunity() public returns (bool) {
         require(tokenContract.balanceOf(msg.sender) > accessFee, "Don't have enough tokens");
+
         if (accessFee == 0) {
             members.push(msg.sender);
             return true;
         }
-        tokenContract.transfer(address(this), accessFee);
+
+        if (accessFee > 0) {
+        require(tokenContract.transferFrom(msg.sender, address(this), accessFee), "Token transfer failed");
+    }
         members.push(msg.sender);
         return true;
     }

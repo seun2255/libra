@@ -23,7 +23,7 @@ import logoText from "./logoText.svg";
 import create from "./create.svg";
 import finance from "./finance.svg";
 import home from "./home.svg";
-import xdcLogo from "./xdcLogo.svg";
+import filLogo from "./filLogo.svg";
 import change from "./switch.svg";
 import arrowDown from "./arrowDown.svg";
 import requests from "./requests.svg";
@@ -68,7 +68,7 @@ const icons = {
   finance,
   home,
   folder,
-  xdcLogo,
+  filLogo,
   change,
   arrowDown,
   requests,

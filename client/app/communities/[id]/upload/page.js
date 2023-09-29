@@ -38,7 +38,6 @@ export default function UploadVideo() {
   const [encrypting, setEncrypting] = useState(false);
   const [data, setData] = useState({});
   const pathname = usePathname();
-  console.log(pathname);
 
   const { user } = useSelector((state) => state.user);
 
@@ -122,6 +121,7 @@ export default function UploadVideo() {
       const hash = await uploadEncryptedFile(upload, progressCallback);
       setUploading(false);
       setEncrypting(true);
+      console.log(data.contract);
       const cid = await applyAccessControlCommunity(hash, data.contract);
       setEncrypting(false);
       return cid;
@@ -262,7 +262,7 @@ function Tag(props) {
         <button
           className={styles.tag}
           onClick={() => removeTag()}
-          style={{ backgroundColor: "#bfe2d2" }}
+          style={{ backgroundColor: "#999fce" }}
         >
           {text}
           <div className={styles.cross__tag__icon}>

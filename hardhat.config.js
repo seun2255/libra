@@ -19,7 +19,8 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY],
     },
     filecoin: {
-      url: "https://api.calibration.node.glif.io/rpc/v1",
+      chainId: 314159,
+      url: "https://filecoin-calibration.chainstacklabs.com/rpc/v1",
       accounts: [process.env.PRIVATE_KEY],
     },
   },

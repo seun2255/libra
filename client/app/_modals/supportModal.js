@@ -39,59 +39,62 @@ export default function SupportModal(props) {
       if (selectedCurrency === 0) {
         if (tipAmount <= user.balance) {
           sendXDC(payementAddress, tipAmount).then(() => {
-            // recordTransaction(user.address, {
-            //   type: "Support",
-            //   date: timeStamp(),
-            //   amount: tipAmount,
-            //   coin: "matic",
-            // }).then(() => {
-            //   recordTransaction(payementAddress, {
-            //     type: "Gift",
-            //     date: timeStamp(),
-            //     amount: tipAmount,
-            //     coin: "matic",
-            //   }).then(() => {
-            console.log("Got here");
-            setSucces(true);
-            setLoading(false);
-            setTimeout(() => {
-              setSucces(false);
-            }, 4000);
-            //   });
-            // });
+            recordTransaction(user.address, {
+              type: "Support",
+              date: timeStamp(),
+              amount: tipAmount,
+              coin: "fil",
+            }).then(() => {
+              recordTransaction(payementAddress, {
+                type: "Gift",
+                date: timeStamp(),
+                amount: tipAmount,
+                coin: "fil",
+              }).then(() => {
+                console.log("Got here");
+                setSucces(true);
+                setLoading(false);
+                setTimeout(() => {
+                  setSucces(false);
+                }, 4000);
+              });
+            });
           });
         } else {
-          alert("You dont have enough matic");
+          setLoading(false);
+          alert("You dont have enough fil");
         }
       } else {
         if (tipAmount <= user.tokenBalance) {
           sendPrime(payementAddress, tipAmount).then(() => {
-            // recordTransaction(user.address, {
-            //   type: "Support",
-            //   date: timeStamp(),
-            //   amount: tipAmount,
-            //   coin: "pri",
-            // }).then(() => {
-            //   recordTransaction(payementAddress, {
-            //     type: "Gift",
-            //     date: timeStamp(),
-            //     amount: tipAmount,
-            //     coin: "matic",
-            //   }).then(() => {
-            console.log("Got here");
-            setSucces(true);
-            setLoading(false);
-            setTimeout(() => {
-              setSucces(false);
-            }, 4000);
-            //   });
-            // });
+            recordTransaction(user.address, {
+              type: "Support",
+              date: timeStamp(),
+              amount: tipAmount,
+              coin: "pri",
+            }).then(() => {
+              recordTransaction(payementAddress, {
+                type: "Gift",
+                date: timeStamp(),
+                amount: tipAmount,
+                coin: "fil",
+              }).then(() => {
+                console.log("Got here");
+                setSucces(true);
+                setLoading(false);
+                setTimeout(() => {
+                  setSucces(false);
+                }, 4000);
+              });
+            });
           });
         } else {
+          setLoading(false);
           alert("You dont have enough pri");
         }
       }
     } else {
+      setLoading(false);
       alert("You can't send yourself gifts lol");
     }
   };
@@ -184,4 +187,4 @@ export default function SupportModal(props) {
 }
 
 const amount = [1, 5, 10, 25, 100];
-const currency = ["matic", "pri"];
+const currency = ["fil", "pri"];

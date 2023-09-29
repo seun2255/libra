@@ -1,5 +1,26 @@
 import lighthouse from "@lighthouse-web3/sdk";
 import { getSigner } from "./api";
+import axios from "axios";
+
+const registerWorker = async (cid) => {
+  const formData = new FormData();
+  const requestReceivedTime = new Date();
+  const endDate = requestReceivedTime.setMonth(
+    requestReceivedTime.getMonth() + 1
+  );
+  const replicationTarget = 2;
+  const epochs = 4; // how many epochs before deal end should deal be renewed
+  formData.append("cid", cid);
+  formData.append("endDate", endDate);
+  formData.append("replicationTarget", replicationTarget);
+  formData.append("epochs", epochs);
+
+  const response = await axios.post(
+    `https://calibration.lighthouse.storage/api/register_job`,
+    formData
+  );
+  console.log(response.data);
+};
 
 const uploadToLighthouse = async (file, progessCallback) => {
   const dealParams = {
@@ -18,6 +39,8 @@ const uploadToLighthouse = async (file, progessCallback) => {
     dealParams,
     progessCallback
   );
+  await registerWorker(uploadResponse.data.Hash);
+  console.log(uploadResponse.data.Hash);
   return uploadResponse.data.Hash;
 };
 
@@ -46,7 +69,7 @@ const uploadEncryptedFile = async (file, progressCallback) => {
     progressCallback
   );
   const { Hash } = response.data[0];
-
+  await registerWorker(Hash);
   return Hash;
 };
 
@@ -96,7 +119,7 @@ const applyAccessControlCommunity = async (hash, contract) => {
   const conditions = [
     {
       id: 1,
-      chain: "Mumbai",
+      chain: "Calibration",
       method: "isMember",
       standardContractType: "Custom",
       contractAddress: contract,
@@ -122,7 +145,7 @@ const applyAccessControlCommunity = async (hash, contract) => {
   return accessResponse.data.cid;
 };
 
-const decryptFile = async (hash) => {
+const decryptFile = async (hash, fileType) => {
   const signer = await getSigner();
   const address = signer.address;
   const messageRequested = (await lighthouse.getAuthMessage(address)).data
@@ -135,7 +158,6 @@ const decryptFile = async (hash) => {
     signedMessage
   );
 
-  const fileType = "video/mp4";
   const decrypted = await lighthouse.decryptFile(
     hash,
     keyObject.data.key,
@@ -147,10 +169,18 @@ const decryptFile = async (hash) => {
   return url;
 };
 
+const getDeal = async (cid) => {
+  let response = await axios.get(
+    `https://api.lighthouse.storage/api/lighthouse/get_proof?cid=${cid}&network=testnet`
+  );
+  return response.data;
+};
+
 export {
   uploadToLighthouse,
   uploadEncryptedFile,
   applyAccessControl,
   applyAccessControlCommunity,
   decryptFile,
+  getDeal,
 };

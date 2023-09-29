@@ -44,22 +44,22 @@ const getSigner = async () => {
   // return signer;
 
   if (window.ethereum) {
-    window.ethereum.request({
-      method: "wallet_addEthereumChain",
-      params: [
-        {
-          chainId: "0x13881",
-          rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
-          chainName: "Matic Mumbai",
-          nativeCurrency: {
-            name: "MATIC",
-            symbol: "MATIC",
-            decimals: 18,
-          },
-          blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-        },
-      ],
-    });
+    // window.ethereum.request({
+    //   method: "wallet_addEthereumChain",
+    //   params: [
+    //     {
+    //       chainId: "0x13881",
+    //       rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+    //       chainName: "Matic Mumbai",
+    //       nativeCurrency: {
+    //         name: "MATIC",
+    //         symbol: "MATIC",
+    //         decimals: 18,
+    //       },
+    //       blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+    //     },
+    //   ],
+    // });
 
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -290,8 +290,18 @@ const isCommunityMember = async (contractAddress) => {
   return isMember;
 };
 
-const joinCommunity = async (contractAddress) => {
+const joinCommunity = async (contractAddress, cost) => {
   const contract = await getCommunityContract(contractAddress);
+  const tokenContract = await getTokenContract();
+
+  const costAmount = ethers.parseEther(cost.toString());
+
+  if (cost !== "0") {
+    const approvalTx = await tokenContract.approve(contractAddress, costAmount);
+
+    await approvalTx.wait();
+  }
+  console.log("e reach here");
 
   let txn = await contract.joinCommunity();
   await txn.wait();

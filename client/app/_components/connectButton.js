@@ -7,7 +7,9 @@ import {
 } from "@dataverse/dataverse-connector";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/user";
+import { login, updateUser } from "../redux/user";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../database";
 import { getBalances } from "../api";
 import styles from "./connectButton.module.css";
 import { checkIfUserExists, createUser, getUserDetails } from "../database";
@@ -53,6 +55,20 @@ export default function ConnectButton() {
           user.tokenBalance = tokenBalanceEther;
           dispatch(login(user));
         }
+        const unsubUser = onSnapshot(
+          doc(db, "users", res.address.toLowerCase()),
+          (doc) => {
+            getUserDetails(res.address.toLowerCase()).then(async (data) => {
+              const { tokenBalanceEther, ethBalanceEther } = await getBalances(
+                res.address
+              );
+              const user = data;
+              user.balance = ethBalanceEther;
+              user.tokenBalance = tokenBalanceEther;
+              dispatch(updateUser(user));
+            });
+          }
+        );
       });
     } catch (error) {
       console.error(error);

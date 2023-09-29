@@ -214,7 +214,7 @@ export default function UploadVideo() {
           </div>
         </div>
 
-        <div className={styles.input__box}>
+        {/* <div className={styles.input__box}>
           <h3>Access</h3>
           <div className={styles.token__choice}>
             {privacy.map((item, id) => {
@@ -243,7 +243,7 @@ export default function UploadVideo() {
               />
             </div>
           )}
-        </div>
+        </div> */}
 
         <div className={styles.buttons}>
           <button className={styles.upload__button} onClick={handleUpload}>
@@ -274,7 +274,7 @@ function Tag(props) {
         <button
           className={styles.tag}
           onClick={() => removeTag()}
-          style={{ backgroundColor: "#bfe2d2" }}
+          style={{ backgroundColor: "#999fce" }}
         >
           {text}
           <div className={styles.cross__tag__icon}>

@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 
 export default function Finance() {
   const { user } = useSelector((state) => state.user);
-  const [coin, setCoin] = useState("xdc");
+  const [coin, setCoin] = useState("fil");
   const [swapAmount, setSwapAmount] = useState(0);
   const [succes, setSucces] = useState(false);
   const [succesText, setSuccesText] = useState("");
@@ -38,6 +38,7 @@ export default function Finance() {
         const amount = swapAmount.toString();
         buyTokens(amount).then(() => {
           console.log("got here");
+          console.log(user);
           recordTransaction(user.address, {
             type: "Swap",
             date: timeStamp(),
@@ -88,7 +89,7 @@ export default function Finance() {
                 </div>
                 <div className={styles.token__details}>
                   <p className={styles}>fil balance</p>
-                  <h3>{formatToTwoDecimalPlaces(user.balance)} ETH</h3>
+                  <h3>{formatToTwoDecimalPlaces(user.balance)} FIL</h3>
                 </div>
               </div>
               <div
@@ -99,7 +100,7 @@ export default function Finance() {
                   className={styles.token__icon}
                   style={{ width: "25px", height: "25px" }}
                 >
-                  <Image src={icons.logo} alt="icon" fill />
+                  <Image src={icons.library} alt="icon" fill />
                 </div>
                 <div className={styles.token__details}>
                   <p className={styles}>Prime balance</p>

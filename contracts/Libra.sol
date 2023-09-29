@@ -370,9 +370,8 @@ contract Libra is Ownable {
         string memory _description,
         string memory _accessfee,
         uint256 _cost
-
     ) public {
-        Community newCommunity = new Community(tokenContractAddress, _cost);
+        Community newCommunity = new Community(tokenContractAddress, _cost, msg.sender);
         newCommunity.setAccessControl(rowControllerAddress);
         string memory tableName = newCommunity.getFilesTableName();
         address contractAddress = newCommunity.getContractAddress(); 

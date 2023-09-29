@@ -28,9 +28,9 @@ export default function CreateCommunity(props) {
       setTimeout(async () => {
         const communities = await getAllCommunities();
         console.log(communities);
-        const newCommunity = communities[communities.length - 1];
+        const newCommunity = communities.length + 1;
         console.log(newCommunity);
-        joinCommunity(user.address, newCommunity.id).then(() => {
+        joinCommunity(user.address, newCommunity).then(() => {
           setSucces(true);
           setLoading(false);
           setTimeout(() => {

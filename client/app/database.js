@@ -26,7 +26,7 @@ const checkIfUserExists = async (user) => {
   var state = false;
   const addresses = Object.keys(data);
   addresses.map((address) => {
-    if (address === user) state = true;
+    if (address === user.toLowerCase()) state = true;
   });
   return state;
 };
@@ -39,7 +39,7 @@ const createUser = async (address) => {
     profilePic: "",
     banner: "",
     communities: [],
-    address: address,
+    address: address.toLowerCase(),
     transactions: [],
   };
   var data = {};
@@ -48,10 +48,10 @@ const createUser = async (address) => {
     // doc.data() is never undefined for query doc snapshots
     data[doc.id] = doc.data();
   });
-  if (data[address]) {
+  if (data[address.toLowerCase()]) {
     console.log("User already registered");
   } else {
-    await setDoc(doc(db, "users", address), user);
+    await setDoc(doc(db, "users", address.toLowerCase()), user);
   }
 };
 
@@ -69,13 +69,12 @@ const updateUserProfile = async (
     // doc.data() is never undefined for query doc snapshots
     data[doc.id] = doc.data();
   });
-  console.log(address);
-  var temp = data[address];
+  var temp = data[address.toLowerCase()];
   console.log(temp);
   temp.about = about;
   temp.username = username;
   temp.profilePic = profilePic;
-  await setDoc(doc(db, "users", address), temp);
+  await setDoc(doc(db, "users", address.toLowerCase()), temp);
 };
 
 //gets a users data
@@ -86,7 +85,7 @@ const getUserDetails = async (address) => {
     // doc.data() is never undefined for query doc snapshots
     data[doc.id] = doc.data();
   });
-  const details = data[address];
+  const details = data[address.toLowerCase()];
   // const balances = await getTokenBalance(address);
   // details.balance = balances.ethBalanceEther;
   // details.tokenBalance = balances.tokenBalanceEther;
@@ -100,7 +99,7 @@ const joinCommunity = async (address, communityId) => {
     // doc.data() is never undefined for query doc snapshots
     data[doc.id] = doc.data();
   });
-  const user = data[address];
+  const user = data[address.toLowerCase()];
   console.log(user);
   // user.communities.push(communityId);
   // await setDoc(doc(db, "users", address), user);
@@ -113,9 +112,10 @@ const recordTransaction = async (address, details) => {
     // doc.data() is never undefined for query doc snapshots
     data[doc.id] = doc.data();
   });
-  const user = data[address];
+  const user = data[address.toLowerCase()];
+  console.log(user);
   user.transactions.unshift(details);
-  await setDoc(doc(db, "users", address), user);
+  await setDoc(doc(db, "users", address.toLowerCase()), user);
 };
 
 export {
