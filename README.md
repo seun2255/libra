@@ -7,8 +7,6 @@ Communites that many people can contribute to.
 
 - ### [Libra](https://libra-dev-1.vercel.app/)
 
-## Resources
-
 - #### [Main Contract](https://calibration.filfox.info/en/address/0xa403e956d0fB10d9114d4252AE7753EC639BB00d)
 
 - #### [Token Contract](https://calibration.filfox.info/en/address/0xC6d35d60BC39EBCcE95D915b757bb59d63192596)
